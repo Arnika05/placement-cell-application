@@ -29,7 +29,17 @@ model Job{
   ctc String?
   type String?
   wordMode String?
+  categoryId String? @db.ObjectId
+  category Category? @relation(fields: [categoryId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+  @@index([categoryId])
+}
 
+model Category{
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String @unique
+  jobs Job[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }

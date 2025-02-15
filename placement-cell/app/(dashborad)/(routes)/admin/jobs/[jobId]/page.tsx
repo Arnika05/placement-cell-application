@@ -1,5 +1,6 @@
+import { CategoryForm } from "@/app/(dashborad)/(routes)/admin/jobs/[jobId]/_components/category-form";
 import JobPublishActions from "@/app/(dashborad)/_components/job-publish-actions";
-import { TitleForm } from "@/app/(dashborad)/_components/title-form";
+import { TitleForm } from "@/app/(dashborad)/(routes)/admin/jobs/[jobId]/_components/title-form";
 import { Banner } from "@/components/ui/banner";
 import { IconBadge } from "@/components/ui/icon-batch";
 import { db } from "@/lib/db";
@@ -31,11 +32,15 @@ const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
         }
     });
 
+    const categories = await db.category.findMany({
+        orderBy: { name: "asc"},
+    })
+
     if (!job) {
         return redirect("/admin/jobs");
     }
 
-    const requiredFields = [job.title, job.description, job.imageUrl];
+    const requiredFields = [job.title, job.description, job.imageUrl, job.categoryId];
     const totalFields = requiredFields.length;
     const completedFields = requiredFields.filter(Boolean).length;
     const completionText = `(${completedFields}/${totalFields})`;
@@ -84,6 +89,12 @@ const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
 
                     {/* title form */}
                     <TitleForm initialData={job} jobId ={job.id} />
+
+                    {/* category form */}
+                    <CategoryForm initialData={job} jobId ={job.id} options={categories.map((category) => ({
+                        label: category.name,
+                        value: category.id
+                    }))} />
                 </div>
             </div>
         </div>
