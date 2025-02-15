@@ -8,6 +8,7 @@ import { auth } from "@clerk/nextjs/server";
 import { ArrowLeft, LayoutDashboard } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { ImageForm } from "./_components/image-form";
 
 const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
     const { jobId } = await params; // No need to await here since params is not a promise
@@ -95,6 +96,9 @@ const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
                         label: category.name,
                         value: category.id
                     }))} />
+
+                    {/* image form */}
+                    <ImageForm initialData={job} jobId ={job.id} />
                 </div>
             </div>
         </div>
