@@ -47,7 +47,7 @@ export const TitleForm = ({initialData, jobId} : TitleFormProps) => {
     const toggleEditing = () => setisEditing((current: any) => !current)
 
   return (
-    <div className="mt-6 border bg-neutral-100 rounded-md p-4">
+    <div className="mt-6 border bg-blue-50 rounded-md p-4">
         <div className="font-medium flex items-center justify-between">
             Job Title
             <Button onClick={toggleEditing} variant={"ghost"}>

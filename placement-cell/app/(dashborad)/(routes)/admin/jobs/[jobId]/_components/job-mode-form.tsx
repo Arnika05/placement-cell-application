@@ -62,7 +62,7 @@ export const JobModeForm = ({ initialData, jobId }: JobModeFormProps) => {
   const selectedOption = jobModeOptions.find((option) => option.value === initialData?.jobMode);
 
   return (
-    <div className="mt-6 border bg-neutral-100 rounded-md p-4">
+    <div className="mt-6 border bg-blue-50 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
         Job Mode
         <Button onClick={toggleEditing} variant="ghost">

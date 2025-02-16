@@ -6,7 +6,7 @@ const backgroundVariant = cva("rounded-full flex items-center justify-center",
 {
     variants: {
         variant: {
-            default: "bg-purple-100",
+            default: "bg-blue-100",
             success: "bg-emerald-100",
         },
         size: {
@@ -24,7 +24,7 @@ const iconVariants = cva("",
     {
         variants: {
             variant: {
-                default: "bg-purple-700",
+                default: "bg-blue-100",
                 success: "bg-emerald-700",
             },
             size: {

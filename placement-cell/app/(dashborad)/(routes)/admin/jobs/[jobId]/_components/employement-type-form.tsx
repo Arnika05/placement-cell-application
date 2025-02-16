@@ -59,7 +59,7 @@ export const EmploymentTypeForm = ({ initialData, jobId }: EmploymentTypeFormPro
   const selectedOption = employmentOptions.find((option) => option.value === initialData?.employmentType);
 
   return (
-    <div className="mt-6 border bg-neutral-100 rounded-md p-4">
+    <div className="mt-6 border bg-blue-50 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
         Employment Type
         <Button onClick={toggleEditing} variant="ghost">
@@ -80,7 +80,7 @@ export const EmploymentTypeForm = ({ initialData, jobId }: EmploymentTypeFormPro
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Combobox heading="Employment Type" options={employmentOptions} {...field} />
+                    <Combobox multiple={false} heading="Employment Type" options={employmentOptions} value={field.value ? [field.value] : []} onChange={(selected) => field.onChange(selected[0] || "")}/>
                   </FormControl>
                   <FormMessage />
                 </FormItem>

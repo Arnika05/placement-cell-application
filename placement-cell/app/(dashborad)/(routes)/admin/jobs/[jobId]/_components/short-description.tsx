@@ -72,9 +72,9 @@ export const ShortDescriptionForm = ({initialData, jobId} : ShortDescriptionForm
 
 
   return (
-    <div className="mt-6 border bg-neutral-100 rounded-md p-4">
+    <div className="mt-6 border bg-blue-50 rounded-md p-4">
         <div className="font-medium flex items-center justify-between">
-            Job Short Description
+            Job description (Create using Google GenerativeAI)
             <Button onClick={toggleEditing} variant={"ghost"}>
                 {isEditing ? (<>Cancel</>) : (<><Pencil className="w-4 h-4 mr-2" />
                 Edit 

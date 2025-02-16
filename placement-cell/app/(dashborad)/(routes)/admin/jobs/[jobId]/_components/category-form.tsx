@@ -55,7 +55,7 @@ export const CategoryForm = ({initialData, jobId, options} : CategoryFormProps) 
     )
 
   return (
-    <div className="mt-6 border bg-neutral-100 rounded-md p-4">
+    <div className="mt-6 border bg-blue-50 rounded-md p-4">
         <div className="font-medium flex items-center justify-between">
             Job Category
             <Button onClick={toggleEditing} variant={"ghost"}>
@@ -80,11 +80,12 @@ export const CategoryForm = ({initialData, jobId, options} : CategoryFormProps) 
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <Combobox 
+                      <Combobox
+                      multiple={false} 
                       heading = "Categories"
                       options = {options}
-                      {...field}
-                      />
+                      value={field.value ? [field.value] : []} onChange={(selected) => field.onChange(selected[0] || "")}/>
+                         
                     </FormControl>
                     <FormMessage />
                   </FormItem>

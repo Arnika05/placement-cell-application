@@ -42,7 +42,7 @@ export const NavbarRoutes = () => {
       {/* User Profile Button */}
       <UserButton />
 
-      {/* Consistent Sign Out Button */}
+      {/* Consistent Sign Out Button
       <SignOutButton redirectUrl="/sign-in">
         <Button
           variant="outline"
@@ -52,7 +52,7 @@ export const NavbarRoutes = () => {
           <LogOut className="h-4 w-4" />
           Sign Out
         </Button>
-      </SignOutButton>
+      </SignOutButton> */}
     </div>
   );
 };

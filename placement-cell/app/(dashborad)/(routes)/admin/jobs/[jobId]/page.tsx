@@ -5,7 +5,7 @@ import { Banner } from "@/components/ui/banner";
 import { IconBadge } from "@/components/ui/icon-batch";
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
-import { ArrowLeft, LayoutDashboard } from "lucide-react";
+import { ArrowLeft, Icon, LayoutDashboard, ListCheck } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ImageForm } from "./_components/image-form";
@@ -14,6 +14,8 @@ import { EmploymentTypeForm} from "./_components/employement-type-form";
 import { CompensationForm } from "./_components/compensation-form";
 import { JobModeForm } from "./_components/job-mode-form";
 import { CoursesEligibleForm } from "./_components/eligible-courses";
+import { TagsForm } from "./_components/tags-form";
+import { DeadlineForm } from "./_components/deadline-form";
 
 const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
     const { jobId } = await params; // No need to await here since params is not a promise
@@ -113,10 +115,25 @@ const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
 
                      {/* CTC Form */}
                      <CompensationForm initialData={job} jobId={jobId as string} />
+                    
+                     {/* Deadline form */}
+                     <DeadlineForm initialData={job} jobId ={job.id} />
 
-                     {/* Eligible Course */}
-                     <CoursesEligibleForm initialData={job} jobId ={job.id} />
+                </div>
 
+                {/* right container */}
+                <div className="space-y-6">
+                    <div>
+                        <div className="flex items-center gap-x-2">
+                            <IconBadge icon={ListCheck} />
+                            <h2 className="text-xl text-neutral-700">Job Requirements</h2>
+                        </div>
+
+                        <TagsForm initialData={job} jobId ={job.id}/>
+                    </div>
+
+                    {/* Eligible Course */}
+                    <CoursesEligibleForm initialData={job} jobId ={job.id} />
                 </div>
             </div>
         </div>

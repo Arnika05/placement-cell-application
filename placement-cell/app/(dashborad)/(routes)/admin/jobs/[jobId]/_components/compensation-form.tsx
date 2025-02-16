@@ -61,7 +61,7 @@ export const CompensationForm = ({ initialData, jobId }: CompensationFormProps) 
   const toggleEditing = () => setIsEditing((current) => !current);
 
   return (
-    <div className="mt-6 border bg-neutral-100 rounded-md p-4">
+    <div className="mt-6 border bg-blue-50 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
         CTC/Stipend
         <Button onClick={toggleEditing} variant="ghost">
