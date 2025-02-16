@@ -26,7 +26,7 @@ model Job{
   savedUsers String[]
   employmentType String?
   deadline   DateTime?
-  ctc String?
+  compensation String?
   type String?
   wordMode String?
   categoryId String? @db.ObjectId

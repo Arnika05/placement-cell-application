@@ -11,6 +11,7 @@ import { redirect } from "next/navigation";
 import { ImageForm } from "./_components/image-form";
 import { ShortDescriptionForm } from "./_components/short-description";
 import { EmploymentTypeForm} from "./_components/employement-type-form";
+import { CompensationForm } from "./_components/compensation-form";
 
 const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
     const { jobId } = await params; // No need to await here since params is not a promise
@@ -107,6 +108,9 @@ const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
 
                      {/* shift timing form */}
                      <EmploymentTypeForm initialData={job} jobId ={job.id} />
+
+                     {/* CTC Form */}
+                     <CompensationForm initialData={job} jobId={jobId as string} />
 
                 </div>
             </div>
