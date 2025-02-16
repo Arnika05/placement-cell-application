@@ -9,6 +9,7 @@ import { ArrowLeft, LayoutDashboard } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ImageForm } from "./_components/image-form";
+import { ShortDescriptionForm } from "./_components/short-description";
 
 const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
     const { jobId } = await params; // No need to await here since params is not a promise
@@ -97,8 +98,12 @@ const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
                         value: category.id
                     }))} />
 
-                    {/* image form */}
+                    {/* cover image */}
                     <ImageForm initialData={job} jobId ={job.id} />
+
+                    {/* short description */}
+                    <ShortDescriptionForm initialData={job} jobId ={job.id} />
+
                 </div>
             </div>
         </div>
