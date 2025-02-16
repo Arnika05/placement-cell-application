@@ -28,7 +28,9 @@ model Job{
   deadline   DateTime?
   compensation String?
   type String?
-  wordMode String?
+  jobMode String?
+  location String?
+  eligibleCourses String[] @default([])
   categoryId String? @db.ObjectId
   category Category? @relation(fields: [categoryId], references: [id])
   createdAt DateTime @default(now())

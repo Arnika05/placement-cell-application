@@ -1,16 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { Check, ChevronsUpDown, Search } from "lucide-react";
+import { ChevronsUpDown, Search } from "lucide-react";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
   CommandGroup,
-  CommandInput,
-  CommandItem,
   CommandList,
 } from "@/components/ui/command";
 import {
@@ -22,31 +19,49 @@ import { ListItem } from "./list-item";
 
 interface ComboboxProps {
   options: { label: string; value: string }[];
-  value?: string;
-  onChange: (value: string) => void;
+  value?: string[]; // Supports multiple selections
+  onChange: (value: string[]) => void;
   heading: string;
+  multiple?: boolean;
 }
 
 export const Combobox = ({
   options,
-  value,
+  value = [],
   onChange,
   heading,
+  multiple = false,
 }: ComboboxProps) => {
   const [open, setOpen] = React.useState(false);
   const [searchTerm, setSearchTerm] = React.useState("");
-  const [filtered, setFiltered] = React.useState<
-    { label: string; value: string }[]
-  >([]);
 
-  const handleSearchTerm = (e: any) => {
-    setSearchTerm(e.target.value);
-    setFiltered(
-      options.filter((item) =>
-        item.label.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    );
+  // Filter options based on search input
+  const filteredOptions = React.useMemo(() => {
+    return searchTerm
+      ? options.filter((item) =>
+          item.label.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      : options;
+  }, [searchTerm, options]);
+
+  // Handles user selection
+  const handleSelection = (selectedValue: string) => {
+    if (multiple) {
+      const newValues = value.includes(selectedValue)
+        ? value.filter((v) => v !== selectedValue) // Remove if selected again
+        : [...value, selectedValue]; // Add to selection
+      onChange(newValues);
+    } else {
+      onChange([selectedValue]); // Single selection
+      setOpen(false); // Close dropdown on selection
+    }
   };
+
+  // Limit the number of displayed values
+  const selectedText =
+    value.length > 2
+      ? `${value.slice(0, 2).map((v) => options.find((o) => o.value === v)?.label).join(", ")} +${value.length - 2} more`
+      : value.map((v) => options.find((o) => o.value === v)?.label).join(", ") || "Select option...";
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -55,49 +70,36 @@ export const Combobox = ({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between"
+          className="w-full justify-between overflow-hidden"
         >
-          {value
-            ? options.find((option) => option.value === value)?.label
-            : "Select option..."}
+          <span className="truncate max-w-[80%]">{selectedText}</span>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full p-0 md:min-w-96">
+
+      <PopoverContent className="w-full p-0 md:min-w-96 max-h-60 overflow-auto">
         <Command>
+          {/* Search Input */}
           <div className="w-full px-2 py-1 flex items-center border rounded-md border-gray-100">
             <Search className="mr-2 h-4 w-4 min-w-4" />
             <input
               type="text"
               placeholder="Search category"
-              onChange={handleSearchTerm}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               className="flex-1 w-full outline-none text-sm py-1"
             />
           </div>
+
           <CommandList>
             <CommandGroup heading={heading}>
-              {searchTerm === "" ? (
-                options.map((option) => (
+              {filteredOptions.length > 0 ? (
+                filteredOptions.map((option) => (
                   <ListItem
                     key={option.value}
                     category={option}
-                    onSelect={() => {
-                      onChange(option.value === value ? "" : option.value);
-                      setOpen(false);
-                    }}
-                    isChecked={option?.value === value}
-                  />
-                ))
-              ) : filtered.length > 0 ? (
-                filtered.map((option) => (
-                  <ListItem
-                    key={option.value}
-                    category={option}
-                    onSelect={() => {
-                      onChange(option.value === value ? "" : option.value);
-                      setOpen(false);
-                    }}
-                    isChecked={option?.value === value}
+                    onSelect={() => handleSelection(option.value)}
+                    isChecked={value.includes(option.value)}
                   />
                 ))
               ) : (
