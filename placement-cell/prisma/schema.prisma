@@ -24,7 +24,7 @@ model Job{
   isPublished Boolean @default(false)
   tags String?
   savedUsers String[]
-  shiftTiming String?
+  employmentType String?
   deadline   DateTime?
   ctc String?
   type String?

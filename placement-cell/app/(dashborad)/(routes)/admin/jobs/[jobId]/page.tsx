@@ -10,6 +10,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ImageForm } from "./_components/image-form";
 import { ShortDescriptionForm } from "./_components/short-description";
+import { EmploymentTypeForm} from "./_components/employement-type-form";
 
 const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
     const { jobId } = await params; // No need to await here since params is not a promise
@@ -103,6 +104,9 @@ const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
 
                     {/* short description */}
                     <ShortDescriptionForm initialData={job} jobId ={job.id} />
+
+                     {/* shift timing form */}
+                     <EmploymentTypeForm initialData={job} jobId ={job.id} />
 
                 </div>
             </div>
