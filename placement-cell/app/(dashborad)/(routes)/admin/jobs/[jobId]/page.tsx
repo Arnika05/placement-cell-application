@@ -5,7 +5,7 @@ import { Banner } from "@/components/ui/banner";
 import { IconBadge } from "@/components/ui/icon-batch";
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
-import { ArrowLeft, Icon, LayoutDashboard, ListCheck } from "lucide-react";
+import { ArrowLeft, LayoutDashboard, ListCheck } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ImageForm } from "./_components/image-form";
@@ -16,9 +16,10 @@ import { JobModeForm } from "./_components/job-mode-form";
 import { CoursesEligibleForm } from "./_components/eligible-courses";
 import { TagsForm } from "./_components/tags-form";
 import { DeadlineForm } from "./_components/deadline-form";
+import { Progress } from "@/components/ui/progress"; // Add a progress bar component
 
 const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
-    const { jobId } = await params; // No need to await here since params is not a promise
+    const { jobId } = params; // No need to await here since params is not a promise
 
     // Verify the MongoDB ID
     const validObjectIdRegex = /^[0-9a-fA-F]{24}$/;
@@ -26,7 +27,7 @@ const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
         return redirect("/admin/jobs");
     }
 
-    const authSession = await auth(); // Correct usage of await with auth
+    const authSession = await auth();
     const userId = authSession?.userId;
 
     if (!userId) {
@@ -36,13 +37,13 @@ const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
     const job = await db.job.findUnique({
         where: {
             id: jobId,
-            userId
-        }
+            userId,
+        },
     });
 
     const categories = await db.category.findMany({
-        orderBy: { name: "asc"},
-    })
+        orderBy: { name: "asc" },
+    });
 
     if (!job) {
         return redirect("/admin/jobs");
@@ -52,88 +53,80 @@ const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
     const totalFields = requiredFields.length;
     const completedFields = requiredFields.filter(Boolean).length;
     const completionText = `(${completedFields}/${totalFields})`;
+    const completionPercentage = (completedFields / totalFields) * 100;
     const isComplete = requiredFields.every(Boolean);
 
     return (
-        <div className="p-6">
+        <div className="p-8 bg-gray-100 min-h-screen"> {/* Background color for better contrast */}
+            {/* Back Button */}
             <Link href="/admin/jobs">
-                <div className="flex items-center gap-3 text-sm text-neutral-500">
+                <div className="flex items-center gap-3 text-sm text-blue-600 hover:text-blue-800 transition">
                     <ArrowLeft className="w-4 h-4" />
-                    Back
+                    <span className="font-medium">Back to Jobs</span>
                 </div>
             </Link>
 
-            {/* Title */}
-            <div className="flex items-center justify-between my-4">
+            {/* Header Section */}
+            <div className="flex items-center justify-between mt-6 p-4 bg-white shadow-md rounded-lg">
                 <div className="flex flex-col gap-y-2">
-                    <h1 className="text-2xl font-medium">Job Setup</h1>
-                    <span className="text-sm text-neutral-500">
+                    <h1 className="text-2xl font-semibold text-gray-800">Job Setup</h1>
+                    <span className="text-sm text-gray-500">
                         Complete All Fields {completionText}
                     </span>
+                    <Progress value={completionPercentage} className="w-64 mt-2" /> {/* Progress bar */}
                 </div>
 
                 {/* Action Button */}
-                <JobPublishActions
-                    jobId={jobId} // Corrected prop passing syntax
-                    isPublished={job.isPublished}
-                    disabled={!isComplete}
-                />
+                <JobPublishActions jobId={jobId} isPublished={job.isPublished} disabled={!isComplete} />
             </div>
 
-            {/* warning before publishing the post */}
-            <Banner 
-                variant={"warning"}
-                label="This job is unpublished. It will not be visible in the job list."
-            />
+            {/* Warning Banner */}
+            {!job.isPublished && (
+                <Banner
+                    variant="warning"
+                    label="This job is unpublished. It will not be visible in the job list."
+                />
+            )}
 
-            {/* container layout */}
-            <div  className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
-                <div>
-                    {/* title */}
-                    <div className="flex items-center gap-x-2">
-                        <IconBadge icon={LayoutDashboard} />
-                        <h2 className="text-xl text-neutral-700">Customize your job</h2>
-                    </div>
-
-                    {/* title form */}
-                    <TitleForm initialData={job} jobId ={job.id} />
-
-                    {/* category form */}
-                    <CategoryForm initialData={job} jobId ={job.id} options={categories.map((category) => ({
-                        label: category.name,
-                        value: category.id
-                    }))} />
-
-                    {/* cover image */}
-                    <ImageForm initialData={job} jobId ={job.id} />
-
-                    {/* short description */}
-                    <ShortDescriptionForm initialData={job} jobId ={job.id} />
-
-                     {/* shift timing form */}
-                     <EmploymentTypeForm initialData={job} jobId ={job.id} />
-
-                     {/* CTC Form */}
-                     <CompensationForm initialData={job} jobId={jobId as string} />
-                    
-                     {/* Deadline form */}
-                     <DeadlineForm initialData={job} jobId ={job.id} />
-
-                </div>
-
-                {/* right container */}
+            {/* Form Layout */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
+                {/* Left Section */}
                 <div className="space-y-6">
-                    <div>
-                        <div className="flex items-center gap-x-2">
-                            <IconBadge icon={ListCheck} />
-                            <h2 className="text-xl text-neutral-700">Job Requirements</h2>
+                    <div className="p-6 bg-white shadow-md rounded-lg">
+                        <div className="flex items-center gap-x-2 mb-4">
+                            <IconBadge icon={LayoutDashboard} />
+                            <h2 className="text-xl font-semibold text-gray-700">Customize your job</h2>
                         </div>
 
-                        <TagsForm initialData={job} jobId ={job.id}/>
+                        {/* Forms */}
+                        <TitleForm initialData={job} jobId={job.id} />
+                        <CategoryForm
+                            initialData={job}
+                            jobId={job.id}
+                            options={categories.map((category) => ({
+                                label: category.name,
+                                value: category.id,
+                            }))}
+                        />
+                        <ImageForm initialData={job} jobId={job.id} />
+                        <ShortDescriptionForm initialData={job} jobId={job.id} />
+                        <EmploymentTypeForm initialData={job} jobId={job.id} />
+                        <CompensationForm initialData={job} jobId={job.id} />
+                        <DeadlineForm initialData={job} jobId={job.id} />
                     </div>
+                </div>
 
-                    {/* Eligible Course */}
-                    <CoursesEligibleForm initialData={job} jobId ={job.id} />
+                {/* Right Section */}
+                <div className="space-y-6">
+                    <div className="p-6 bg-white shadow-md rounded-lg">
+                        <div className="flex items-center gap-x-2 mb-4">
+                            <IconBadge icon={ListCheck} />
+                            <h2 className="text-xl font-semibold text-gray-700">Job Requirements</h2>
+                        </div>
+
+                        <TagsForm initialData={job} jobId={job.id} />
+                        <CoursesEligibleForm initialData={job} jobId={job.id} />
+                    </div>
                 </div>
             </div>
         </div>
