@@ -33,9 +33,29 @@ model Job{
   eligibleCourses String[] @default([])
   categoryId String? @db.ObjectId
   category Category? @relation(fields: [categoryId], references: [id])
+  companyId String? @db.ObjectId
+  company Company? @relation(fields: [categoryId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   @@index([categoryId])
+  @@index([companyId])
+}
+
+model Company{
+    id String @id @default(auto()) @map("_id") @db.ObjectId
+    userId String
+    name String
+    description String?
+    logo String?
+    coverImage String?
+    website String?
+    email String?
+    linkedIn String?
+    job Job[]
+    overview String?
+    whyJoinUs String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @default(now())
 }
 
 model Category{
