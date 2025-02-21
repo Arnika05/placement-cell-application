@@ -75,10 +75,12 @@ export const DeadlineForm = ({ jobId, initialData }: DeadlineFormProps) => {
       ) : (
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 mt-3">
           <input
-            type="date"
-            {...form.register("deadline")}
-            className="w-full p-2 rounded-md border"
-          />
+          type="date"
+          {...form.register("deadline")}
+          min={new Date().toISOString().split("T")[0]} // Prevent past dates
+          className="w-full p-2 rounded-md border"
+        />
+
           <Button type="submit" disabled={isSubmitting}>
             {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "Save"}
           </Button>

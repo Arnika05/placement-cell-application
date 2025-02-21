@@ -27,7 +27,7 @@ const jobModeOptions = [
 
 const formSchema = z.object({
   jobMode: z.string().min(1, "Job mode is required"),
-  location: z.string().optional(),
+  location: z.string().optional(), // Accept multiple locations as a string
 });
 
 export const JobModeForm = ({ initialData, jobId }: JobModeFormProps) => {
@@ -43,7 +43,7 @@ export const JobModeForm = ({ initialData, jobId }: JobModeFormProps) => {
   });
 
   const { isSubmitting, isValid } = form.formState;
-  const {watch} = form
+  const { watch, setValue } = form;
   const selectedJobMode = watch("jobMode");
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -76,7 +76,9 @@ export const JobModeForm = ({ initialData, jobId }: JobModeFormProps) => {
             {selectedOption?.label || "No Job Mode Set"}
           </p>
           {(initialData?.jobMode === "Office" || initialData?.jobMode === "Hybrid") && initialData?.location && (
-            <p className="text-sm mt-1">Location: {initialData.location}</p>
+            <p className="text-sm mt-1">
+              <strong>Location(s):</strong> {initialData.location.split(",").join(", ")}
+            </p>
           )}
         </div>
       ) : (
@@ -88,14 +90,18 @@ export const JobModeForm = ({ initialData, jobId }: JobModeFormProps) => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                  <Combobox
-  heading="Job Mode"
-  options={jobModeOptions}
-  multiple={false}
-  value={field.value ? [field.value] : []} // Convert string to array
-  onChange={(val) => field.onChange(val[0])} // Extract single value from array
-/>
-
+                    <Combobox
+                      heading="Job Mode"
+                      options={jobModeOptions}
+                      multiple={false}
+                      value={field.value ? [field.value] : []} // Convert string to array
+                      onChange={(val) => {
+                        field.onChange(val[0]); // Extract single value from array
+                        if (val[0] === "Remote") {
+                          setValue("location", ""); // Clear location for remote jobs
+                        }
+                      }}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -111,7 +117,7 @@ export const JobModeForm = ({ initialData, jobId }: JobModeFormProps) => {
                     <FormControl>
                       <input
                         type="text"
-                        placeholder="Enter location"
+                        placeholder="Enter location(s) separated by commas"
                         className="w-full p-2 border rounded-md"
                         {...field}
                       />

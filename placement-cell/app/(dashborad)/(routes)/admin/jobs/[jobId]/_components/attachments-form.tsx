@@ -116,7 +116,7 @@ export const AttachmentsForm = ({
           {initialData.attachments.map((item) => (
             <div
               key={item.url}
-              className="p-3 w-full bg-purple-100 border-purple-200 border text-purple-700 rounded-md flex items-center"
+              className="p-3 w-full bg-blue-100 border-blue-200 border text-blue-700 rounded-md flex items-center"
             >
               <File className="w-4 h-4 mr-2 " />
               <p className="text-xs w-full truncate">{item.name}</p>

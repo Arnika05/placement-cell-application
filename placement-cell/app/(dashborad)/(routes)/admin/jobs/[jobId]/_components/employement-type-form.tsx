@@ -20,7 +20,7 @@ interface EmploymentTypeFormProps {
 }
 
 const employmentOptions = [
-  { label: "2M (2 Months", value: "2M" },
+  { label: "2M (2 Months)", value: "2M" },
   { label: "6M (6 Months)", value: "6M" },
   { label: "FTE (Full Time Employment)", value: "FTE" },
   { label: "6M+FTE (6 Months + Full Time Employment)", value: "6M+FTE" },

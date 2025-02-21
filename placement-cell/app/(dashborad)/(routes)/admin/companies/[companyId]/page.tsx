@@ -58,8 +58,6 @@ const CompanyDetailsPage = async ({ params }: { params: { companyId: string } })
     ];
     const totalFields = requiredFields.length;
     const completedFields = requiredFields.filter(Boolean).length;
-    const completionText = `(${completedFields}/${totalFields})`;
-    const isComplete = requiredFields.every(Boolean);
 
     return (
         <div className="p-8 bg-gray-100 min-h-screen">
@@ -67,7 +65,7 @@ const CompanyDetailsPage = async ({ params }: { params: { companyId: string } })
             <Link href="/admin/companies">
                 <div className="flex items-center gap-3 text-sm text-blue-600 hover:text-blue-800 transition">
                     <ArrowLeft className="w-4 h-4" />
-                    <span className="font-medium">Back to Jobs</span>
+                    <span className="font-medium">Back to Companies</span>
                 </div>
             </Link>
     
@@ -75,9 +73,6 @@ const CompanyDetailsPage = async ({ params }: { params: { companyId: string } })
             <div className="flex items-center justify-between mt-6 p-4 bg-white shadow-md rounded-lg">
                 <div className="flex flex-col gap-y-2">
                     <h1 className="text-2xl font-semibold text-gray-800">Company Setup</h1>
-                    <span className="text-sm text-gray-500">
-                        Complete All Fields {completionText}
-                    </span>
                 </div>
             </div>
     
@@ -96,8 +91,8 @@ const CompanyDetailsPage = async ({ params }: { params: { companyId: string } })
                     {/* Name form */}
                     <CompanyName initialData={company} companyId={companyId} />
     
-                    {/* Description form */}
-                    <CompanyDescriptionForm initialData={company} companyId={companyId} />
+                    {/* Description form
+                    <CompanyDescriptionForm initialData={company} companyId={companyId} /> */}
     
                     {/* Logo form */}
                     <CompanyLogoForm initialData={company} companyId={companyId} />
