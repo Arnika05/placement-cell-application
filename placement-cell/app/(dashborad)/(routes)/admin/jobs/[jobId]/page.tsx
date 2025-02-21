@@ -5,7 +5,7 @@ import { Banner } from "@/components/ui/banner";
 import { IconBadge } from "@/components/ui/icon-batch";
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
-import { ArrowLeft, LayoutDashboard, ListCheck } from "lucide-react";
+import { ArrowLeft, Building2, File, LayoutDashboard, ListCheck } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ImageForm } from "./_components/image-form";
@@ -17,6 +17,8 @@ import { CoursesEligibleForm } from "./_components/eligible-courses";
 import { TagsForm } from "./_components/tags-form";
 import { DeadlineForm } from "./_components/deadline-form";
 import { Progress } from "@/components/ui/progress"; // Add a progress bar component
+import { CompanyForm } from "./_components/company-form";
+import { AttachmentsForm } from "./_components/attachments-form";
 
 const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
     const { jobId } = params; // No need to await here since params is not a promise
@@ -39,9 +41,25 @@ const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
             id: jobId,
             userId,
         },
+        include: {
+            attachments: true, // 👈 Ensure attachments are fetched
+        },
     });
+    
 
     const categories = await db.category.findMany({
+        orderBy: { name: "asc" },
+    });
+
+    const companies = await db.company.findMany({
+        where: {
+            userId
+        }, orderBy : {
+            createdAt: "desc"
+        }
+    });
+
+    const attachments= await db.attachment.findMany({
         orderBy: { name: "asc" },
     });
 
@@ -49,7 +67,7 @@ const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
         return redirect("/admin/jobs");
     }
 
-    const requiredFields = [job.title, job.description, job.imageUrl, job.categoryId];
+    const requiredFields = [job.title, job.description, job.imageUrl, job.categoryId, job.companyId];
     const totalFields = requiredFields.length;
     const completedFields = requiredFields.filter(Boolean).length;
     const completionText = `(${completedFields}/${totalFields})`;
@@ -57,7 +75,7 @@ const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
     const isComplete = requiredFields.every(Boolean);
 
     return (
-        <div className="p-8 bg-gray-100 min-h-screen"> {/* Background color for better contrast */}
+        <div className="p-8 bg-gray-100 min-h-screen">
             {/* Back Button */}
             <Link href="/admin/jobs">
                 <div className="flex items-center gap-3 text-sm text-blue-600 hover:text-blue-800 transition">
@@ -73,7 +91,7 @@ const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
                     <span className="text-sm text-gray-500">
                         Complete All Fields {completionText}
                     </span>
-                    <Progress value={completionPercentage} className="w-64 mt-2" /> {/* Progress bar */}
+                    <Progress value={completionPercentage} className="w-64 mt-2" />
                 </div>
 
                 {/* Action Button */}
@@ -126,6 +144,31 @@ const JobDetailsPage = async ({ params }: { params: { jobId: string } }) => {
 
                         <TagsForm initialData={job} jobId={job.id} />
                         <CoursesEligibleForm initialData={job} jobId={job.id} />
+                        
+                        {/* Company details */}
+                        <div className="flex items-center gap-x-2 mb-4">
+                            <IconBadge icon={Building2} />
+                            <h2 className="text-xl font-semibold text-gray-700">Company Details</h2>
+                        </div>
+
+                        <CompanyForm
+                            initialData={job}
+                            jobId={job.id}
+                            options={companies.map((company) => ({
+                                label: company.name,
+                                value: company.id,
+                            }))}
+                        />
+                    </div>
+
+                    {/* Attachments */}
+                    <div className="p-6 bg-white shadow-md rounded-lg">
+                        <div className="flex items-center gap-x-2 mb-4">
+                            <IconBadge icon={File} />
+                            <h2 className="text-xl font-semibold text-gray-700">Attachments</h2>
+                        </div>
+
+                        <AttachmentsForm initialData={{ ...job, attachments: job.attachments ?? [] }} jobId={job.id} />
                     </div>
                 </div>
             </div>

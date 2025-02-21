@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import { ImageUpload } from "@/components/ui/image-upload";
+import { ImageUpload } from "@/components/image-upload";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Job } from "@prisma/client";
 import axios from "axios";

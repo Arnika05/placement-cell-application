@@ -18,7 +18,10 @@ const JobPageOverview = async () => {
     // Fetch jobs
     const jobs = await db.job.findMany({
         where: { userId },
-        include: { category: true },
+        include: { 
+            category: true ,
+            company: true
+        },
         orderBy: { createdAt: "desc" },
     });
 
@@ -26,7 +29,7 @@ const JobPageOverview = async () => {
     const formattedJobs: JobsColumns[] = jobs.map((job) => ({
         id: job.id,
         title: job.title,
-        company: "", // Can be populated if needed
+        company: job.company? job.company.name : "Unknown",
         category: job.category ? job.category.name : "N/A",
         isPublished: job.isPublished,
         createdAt: job.createdAt ? format(new Date(job.createdAt), "MMMM do, yyyy") : "N/A",
