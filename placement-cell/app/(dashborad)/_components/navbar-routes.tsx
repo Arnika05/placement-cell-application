@@ -1,7 +1,8 @@
 "use client";
 
+import { SearchContainer } from "@/components/search-container";
 import { Button } from "@/components/ui/button";
-import { UserButton, SignOutButton } from "@clerk/nextjs";
+import { UserButton } from "@clerk/nextjs";
 import { LogOut, Shield } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -10,9 +11,16 @@ export const NavbarRoutes = () => {
   const pathname = usePathname();
 
   const isAdminPage = pathname?.startsWith("/admin");
-  const isClientPage = pathname?.startsWith("/jobs"); // Fixed condition for client page
+  const isClientPage = pathname?.startsWith("/jobs");
+  const isSearchPage = pathname?.startsWith("/search"); 
 
   return (
+    <>
+    {isSearchPage && (
+      <div className="hidden md:flex w-full px-2 pr-8 items-center gap-x-6">
+        <SearchContainer />
+      </div>
+    )}
     <div className="flex gap-x-2 ml-auto items-center"> {/* Reduced gap */}
       {/* Conditional Button for Admin/Client Pages */}
       {isAdminPage || isClientPage ? (
@@ -54,5 +62,6 @@ export const NavbarRoutes = () => {
         </Button>
       </SignOutButton> */}
     </div>
+    </>
   );
 };

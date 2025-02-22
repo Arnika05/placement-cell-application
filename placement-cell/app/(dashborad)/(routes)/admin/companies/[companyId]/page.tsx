@@ -17,7 +17,7 @@ import { CompanyOverviewForm } from "./overview-form";
 import { WhyJoinUsForm } from "./why-join-us-form";
 
 const CompanyDetailsPage = async ({ params }: { params: { companyId: string } }) => {
-    const { companyId } = params; // No need to await here since params is not a promise
+    const { companyId } = await params; // No need to await here since params is not a promise
 
     // Verify the MongoDB ID
     const validObjectIdRegex = /^[0-9a-fA-F]{24}$/;

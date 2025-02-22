@@ -6,7 +6,7 @@ const DashboardLayout = ({children} : {children : React.ReactNode}) => {
     return ( 
         <div className="h-full">
             {/* header */ }
-            <header className="h-20 pl:56 fixed inset-y-0 w-full z-50">
+            <header className="h-20 pl-56 fixed inset-y-0 w-full z-50">
                 <Navbar />
             </header>
 
