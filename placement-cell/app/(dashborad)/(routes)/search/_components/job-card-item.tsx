@@ -6,10 +6,14 @@ import { motion } from "framer-motion";
 import { formatDistanceToNow } from "date-fns";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { BookmarkCheck, BriefcaseBusiness, Loader2, Eye, EyeOff } from "lucide-react";
+import { BookmarkCheck, BriefcaseBusiness, Loader2, Eye, EyeOff, Bookmark } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { truncate } from "lodash";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 interface JobCardItemProps {
   job: Job;
@@ -20,7 +24,29 @@ export const JobCardItem = ({ job, userId }: JobCardItemProps) => {
   const typeJob = job as Job & { company: Company | null };
   const company = typeJob.company;
   const [isBookmarkLoading, setIsBookmarkLoading] = useState(false);
+  const isSavedByUser = userId && job.savedUsers?.includes(userId)
+  const SavedUsersIcon = isSavedByUser ? BookmarkCheck : Bookmark;
   const [showCourses, setShowCourses] = useState(false);
+  const router = useRouter()
+
+  const onClickSaveJob = async() => {
+    try {
+      setIsBookmarkLoading(true)
+      if (isSavedByUser) {
+        await axios.patch(`/api/jobs/${job.id}/removeJobFromCollection`)
+        toast.success("Job Removed")
+      } else {
+        await axios.patch(`/api/jobs/${job.id}/saveJobToCollection`)
+        toast.success("Job Saved")
+      }
+      router.refresh()
+    } catch (error) {
+      toast.error("Something went wrong")
+      console.log(`Error : ${(error as Error)?.message}`)
+    } finally{
+      setIsBookmarkLoading(false)
+    }
+  }
 
   return (
     <motion.div layout className="w-full">
@@ -53,8 +79,12 @@ export const JobCardItem = ({ job, userId }: JobCardItemProps) => {
             size="icon"
             className="hover:bg-gray-200 transition-all"
             onClick={() => setIsBookmarkLoading(!isBookmarkLoading)}
-          >
-            {isBookmarkLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <BookmarkCheck className="w-5 h-5 text-gray-700 hover:text-gray-900" />}
+          >            
+          {isBookmarkLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : 
+          (<div onClick={onClickSaveJob}>
+              <SavedUsersIcon
+              className={cn("w-4 h-4", isSavedByUser ? "text-emerald-500" : "text-muted-foreground")} />
+          </div>)}
           </Button>
         </div>
 
@@ -123,8 +153,10 @@ export const JobCardItem = ({ job, userId }: JobCardItemProps) => {
             </Button>
           </Link>
 
-          <Button className="text-white bg-blue-600 hover:bg-blue-700 transition-all px-4 py-1.5 rounded-md text-sm shadow-md">
-            Apply Now
+          <Button 
+          className="text-white bg-blue-600 hover:bg-blue-700 transition-all px-4 py-1.5 rounded-md text-sm shadow-md"
+          onClick={onClickSaveJob}>
+            {isSavedByUser ? "Saved" : "Save for Later"}
           </Button>
         </div>
       </Card>
