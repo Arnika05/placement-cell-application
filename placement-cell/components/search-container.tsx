@@ -21,7 +21,6 @@ export const SearchContainer = () => {
         className="w-full pl-10 pr-10 rounded-lg bg-blue-50/80 focus-visible:ring-blue-200 text-sm"
       />
 
-      {/* Clear Button (X) - Positioned Absolutely on the Right */}
       {value && (
         <Button
           variant="ghost"
