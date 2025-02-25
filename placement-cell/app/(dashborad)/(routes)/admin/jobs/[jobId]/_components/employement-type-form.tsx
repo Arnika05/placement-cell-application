@@ -20,10 +20,10 @@ interface EmploymentTypeFormProps {
 }
 
 const employmentOptions = [
-  { label: "2M (2 Months)", value: "2M" },
-  { label: "6M (6 Months)", value: "6M" },
-  { label: "FTE (Full Time Employment)", value: "FTE" },
-  { label: "6M+FTE (6 Months + Full Time Employment)", value: "6M+FTE" },
+  { label: "2M", value: "2M" },
+  { label: "6M", value: "6M" },
+  { label: "FTE", value: "FTE" },
+  { label: "6M+FTE", value: "6M+FTE" },
 ];
 
 const formSchema = z.object({

@@ -31,7 +31,7 @@ export const SidebarRouteItem = ({
     <button
       onClick={handleClick}
       className={cn(
-        "flex items-center gap-3 text-neutral-500 text-base font-medium px-4 py-3 rounded-lg transition-transform transform hover:scale-105 hover:bg-blue-100/40 focus:outline-none",
+        "flex items-center gap-3 text-neutral-500 text-base font-medium py-3 rounded-lg transition-transform transform hover:scale-105 hover:bg-blue-100/40 focus:outline-none",
         isActive &&
           "bg-blue-500/10 text-blue-700 font-semibold shadow-md scale-105" // 🔵 Active route highlight
       )}
@@ -45,7 +45,7 @@ export const SidebarRouteItem = ({
       ></div>
 
       {/* Icon and Label */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-1">
         <Icon
           className={cn("text-neutral-500", isActive && "text-blue-700")} // Icon color on active
           size={22}

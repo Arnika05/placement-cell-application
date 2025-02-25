@@ -2,11 +2,57 @@
 
 import { Search, X } from "lucide-react";
 import { Input } from "./ui/input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useDebounce } from "@/hooks/use-debounce";
+import qs from "query-string";
 
 export const SearchContainer = () => {
-  const [value, setValue] = useState("");
+
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const pathname = usePathname()
+
+  const currentCategroryId = searchParams.get("categoryId")
+  const currentTitle = searchParams.get("title")
+  const CreatedAtFilter = searchParams.get("createdAtFilter")
+  const currentEmployementType = searchParams.get("employementType")
+  const currentJobMode = searchParams.get("jobMode")
+  const currentEligibleCourses = searchParams.get("eligibleCourses")
+
+  const [value, setValue] = useState(currentTitle || "");
+
+  const debounceValue = useDebounce(value)
+
+  useEffect(() => {
+    const url = qs.stringifyUrl({
+      url : pathname,
+      query : {
+        title : debounceValue,
+        categoryId : currentCategroryId,
+        createdAtFilter : CreatedAtFilter,
+        employementType : currentEmployementType,
+        jobMode : currentJobMode,
+        eligibleCourses : currentEligibleCourses,
+
+      }
+    },{
+      skipNull: true,
+      skipEmptyString : true,
+    })
+      router.push(url)
+  }, [
+    debounceValue,
+    currentCategroryId,
+    router,
+    pathname,
+    CreatedAtFilter,
+    currentEmployementType,
+    currentJobMode,
+    currentEligibleCourses,
+  ])
+  
 
   return (
     <div className="flex items-center gap-x-2 relative flex-1 justify-center">
