@@ -80,7 +80,7 @@ export const AttachmentsUploads = ({
 
   return (
     <div>
-      <div className="w-full h-40 bg-purple-100 p-2 flex flex-col items-center justify-center">
+      <div className="w-full h-40 bg-blue-100 p-2 flex flex-col items-center justify-center">
         {isLoading ? (
           <p>{`${progress.toFixed(2)}% Uploading...`}</p>
         ) : (

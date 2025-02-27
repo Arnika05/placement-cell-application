@@ -40,6 +40,7 @@ model Job{
   updatedAt DateTime @default(now())
   @@index([categoryId])
   @@index([companyId])
+  @@fulltext([title])
 }
 
 model Company{
@@ -75,4 +76,63 @@ model Attachment {
   job Job? @relation(fields: [jobId], references: [id], onDelete:  Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+}
+
+model UserProfile {
+  userId String @id @map("_id")
+  fullName String?
+  email String? @unique
+  contact String?
+  appliedJobs AppliedJob[]
+  resumes Resumes[]
+  activeResumeId String?
+  
+  // Additional Student Details
+  dateOfBirth DateTime?
+  gender String? // "Male", "Female", "Other", "Prefer not to say"
+  category String? // "General", "OBC", "SC", "ST", etc.
+  
+  scholarNumber String? @unique
+  tenthPercentage Float?
+  twelfthPercentage Float?
+  cgpa Float?
+  educationLevel String? // "UG", "PG"
+  branch String?
+  graduationYear Int?
+  minorSpecialization String?
+
+  placementStatus String?
+  
+  activeBacklogs Int? @default(0)
+  totalBacklogs Int? @default(0)
+  
+  internships String[] @default([])
+  workExperience String?
+  skills String[] @default([]) // List of skills
+  certifications String[] @default([]) // List of certification names
+  projects String[] @default([]) // List of project titles
+  
+  linkedIn String?
+  github String?
+  portfolio String?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+
+type AppliedJob{
+  jobId String
+  appliedAt DateTime @default(now())
+}
+
+model Resumes{
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  url String
+  userProfileId String
+  userProfile UserProfile @relation(fields: [userProfileId], references: [userId], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  @@index([userProfileId], name : "idx_userProfileId")
 }

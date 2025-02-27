@@ -1,13 +1,8 @@
-import type { NextConfig } from "next";
-
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["res.cloudinary.com"], // Allow Cloudinary images
+    domains: ["res.cloudinary.com", "img.clerk.com"], // Added img.clerk.com
   },
 };
 
 module.exports = nextConfig;
-
-export default nextConfig;
