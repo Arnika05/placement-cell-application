@@ -26,6 +26,7 @@
     "@tiptap/pm": "^2.11.5",
     "@tiptap/react": "^2.11.5",
     "@types/lodash": "^4.17.15",
+    "@types/nodemailer": "^6.4.17",
     "axios": "^1.7.9",
     "class-variance-authority": "^0.7.1",
     "cloudinary": "^2.5.1",
@@ -33,14 +34,17 @@
     "cmdk": "^1.0.4",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.4.7",
+    "handlebars": "^4.7.8",
     "lodash": "^4.17.21",
     "lucide-react": "^0.475.0",
     "next": "15.1.0",
+    "nodemailer": "^6.10.0",
     "query-string": "^9.1.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.2",
     "react-hot-toast": "^2.5.1",
+    "react-icons": "^5.5.0",
     "tailwind-merge": "^3.0.1",
     "tailwind-scrollbar": "^4.0.0",
     "tailwindcss-animate": "^1.0.7",
@@ -48,7 +52,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@types/node": "^20",
+    "@types/node": "^20.17.19",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
@@ -56,6 +60,10 @@
     "postcss": "^8",
     "prisma": "^6.3.1",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  },
+  "prisma": {
+    "seed": "ts-node ./scripts/seeds.ts"
   }
 }

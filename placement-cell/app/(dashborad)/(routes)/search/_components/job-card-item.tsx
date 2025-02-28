@@ -108,16 +108,34 @@ export const JobCardItem = ({ job, userId }: JobCardItemProps) => {
 
           {/* View Courses Button */}
           {job.eligibleCourses && (
-            <Button
-              variant="outline"
-              size="sm"
-              className="ml-auto flex items-center gap-1 text-blue-600 border-blue-400 hover:bg-blue-100 transition-all px-4 py-4"
-              onClick={() => setShowCourses(!showCourses)}
-            >
-              {showCourses ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-              {showCourses ? "Hide Courses" : "View Courses"}
-            </Button>
-          )}
+  <>
+    <Button
+      variant="outline"
+      size="sm"
+      className="ml-auto flex items-center gap-1 text-blue-600 border-blue-400 hover:bg-blue-100 transition-all px-4 py-4"
+      onClick={() => setShowCourses(!showCourses)}
+    >
+      {showCourses ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+      {showCourses ? "Hide Courses" : "View Courses"}
+    </Button>
+
+    {/* Show courses when button is clicked */}
+    {showCourses && (
+      <ul className="mt-2 p-2 bg-gray-100 rounded-md">
+        {Array.isArray(job.eligibleCourses) ? (
+          job.eligibleCourses.map((course, index) => (
+            <li key={index} className="text-gray-700 text-sm px-2 py-1 border-b last:border-b-0">
+              {course}
+            </li>
+          ))
+        ) : (
+          <p className="text-gray-500 text-sm">No eligible courses found</p>
+        )}
+      </ul>
+    )}
+  </>
+)}
+
         </div>
 
         {/* Job Description */}
@@ -145,7 +163,7 @@ export const JobCardItem = ({ job, userId }: JobCardItemProps) => {
             }`}
             onClick={onClickSaveJob}
           >
-            {isSavedByUser ? "Saved" : "Save for Later"}
+            {isSavedByUser ? "    Job Saved      " : "Save for Later"}
           </Button>
         </div>
       </Card>
