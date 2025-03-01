@@ -80,7 +80,7 @@ export const ResumeForm = ({ initialData, userId }: ResumeFormProps) => {
   const setActiveResume = async (resumeId: string) => {
     setIsActiveResumeId(resumeId);
     try {
-      await axios.patch(`/api/users/${userId}`, { activeResumeId: resumeId });
+      await axios.patch(`/api/user/${userId}`, { activeResumeId: resumeId });
       toast.success("Resume Activated");
       router.refresh();
     } catch (error) {

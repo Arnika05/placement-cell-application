@@ -66,7 +66,7 @@ export const JobCardItem = ({ job, userId }: JobCardItemProps) => {
             {/* Job Details */}
             <div className="flex-1">
               <p className="text-xl font-semibold text-gray-900 leading-tight">{job.title}</p>
-              <Link href={`/company/${company?.id}`} className="text-md text-blue-600 hover:underline font-medium">
+              <Link href={`/companies/${company?.id}`} className="text-md text-blue-600 hover:underline font-medium">
                 {company?.name}
               </Link>
               <p className="text-gray-500 text-sm">

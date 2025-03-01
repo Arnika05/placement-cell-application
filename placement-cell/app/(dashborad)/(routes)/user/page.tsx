@@ -16,6 +16,9 @@ import { WorkExperienceForm } from "./_components/work-experience-form";
 import { db } from "@/lib/db";
 import { EmailForm } from "./_components/email-form";
 import { FullNameForm } from "./_components/name-form";
+import { DataTable } from "@/components/ui/data-table";
+import { AppliedJobsColumns, columns } from "./_components/columns";
+import { format } from "date-fns";
 
 const ProfilePage = async () => {
     const { userId } = await auth();
@@ -31,6 +34,40 @@ const ProfilePage = async () => {
             resumes: { orderBy: { createdAt: "desc" } },
         },
     });
+
+    const jobs = await db.job.findMany({
+        where: {
+            userId
+        },
+        include: {
+            company: true,
+            category: true,
+        },
+        
+            orderBy: {
+                createdAt: "desc"
+            }
+        
+    })
+
+    const filterAppliedJobs = profile && profile?.appliedJobs.length > 0 ? 
+    jobs.filter((job) => profile.appliedJobs.some(
+        (appliedJob) => appliedJob.jobId === job.id
+    ))
+    .map((job) => ({
+        ...job,
+        appliedAt: profile.appliedJobs.find(
+            (appliedJob) => appliedJob.jobId === job.id
+        )?.appliedAt
+    })) : []
+
+    const formattedJobs : AppliedJobsColumns[] = filterAppliedJobs.map(job => ({
+        id: job.id,
+        title: job.title,
+        company: job.company ? job.company.name : "",
+        category: job.category? job.category.name : "",
+        appliedAt: job.appliedAt ? format(new Date(job.appliedAt), "MMMM do, yyyy") : ""
+    }))
 
     return (
         <div className="flex flex-col p-4 w-full items-center justify-center bg-white min-h-screen">
@@ -99,6 +136,18 @@ const ProfilePage = async () => {
                         </div>
                     ))}
                 </div>
+            </Box>
+
+            {/* applied jobs list table */}
+            <Box className="flex flex-col p-8 items-center justify-start mt-10 rounded-2xl shadow-2xl bg-white w-full max-w-5xl space-y-5 animate-fade-in ">
+            <div className="bg-gray-50 p-6 rounded-xl shadow-md w-full">
+                <h2 className="text-2xl font-semibold text-blue-600 border-b-2 pb-2">
+                    Applied Jobs
+                </h2>
+                <div className="w-full mt-6">
+                    <DataTable columns={columns} searchKey="company" data={formattedJobs} />
+                </div>
+            </div>
             </Box>
         </div>
     );
