@@ -128,6 +128,12 @@ export const getJobs = async ({
             query.where.AND = filters;
         }
 
+        if (savedJobs){
+            query.where.savedUsers = {
+                has: userId
+            }
+        }
+
         // Execute query
         const jobs = await db.job.findMany(query); // ✅ Added `await`
         return jobs;
