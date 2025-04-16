@@ -53,8 +53,8 @@ const DashBoardHomePage = async () => {
 
         {/* Recommended Jobs */}
         <section className="bg-white p-6 rounded-xl shadow-md">
-          <h3 className="text-2xl font-semibold text-blue-800 mb-4">Recommended for You</h3>
-          <RecommendedJobsList jobs={jobs.slice(0, 6)} userId={userId} />
+          <h3 className="text-2xl font-semibold text-blue-800 mb-4">Jobs Recommended for You</h3>
+          <RecommendedJobsList jobs={jobs.slice(0, 2)} userId={userId} />
         </section>
       </div>
 

@@ -3,8 +3,6 @@
 import Box from "@/components/box";
 import { Job } from "@prisma/client";
 import PageContent from "../(routes)/search/_components/page-content";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 
 interface RecommendedJobsListProps {
   jobs: Job[];
@@ -15,7 +13,7 @@ export const RecommendedJobsList = ({ jobs, userId }: RecommendedJobsListProps) 
   return (
     <Box className="p-1 bg-white rounded-lg shadow-md border border-gray-200">
 
-      <div className="grid gap-1">
+      <div className="grid gap-5">
         <PageContent jobs={jobs} userId={userId} />
       </div>
 
