@@ -36,7 +36,7 @@ const CompaniesOverviewPage = async() => {
     <div className="p-6">
             {/* Header Section */}
             <div className="flex justify-between items-center mb-6">
-                <h1 className="text-2xl font-semibold text-gray-700">Job Listings</h1>
+                <h1 className="text-2xl font-semibold text-gray-700">Company Listings</h1>
                 <Link href="/admin/companies/create">
                     <Button className="bg-blue-600 text-white hover:bg-blue-700 transition-all rounded-lg shadow-md px-4 py-2 flex items-center gap-2">
                         <Plus className="w-5 h-5" />
