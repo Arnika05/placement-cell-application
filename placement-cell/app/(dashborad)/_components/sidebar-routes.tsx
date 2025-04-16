@@ -12,7 +12,7 @@ import qs from "query-string";
 const adminRoutes = [
     { icon: List, label: "Jobs", href: "/admin/jobs" },
     { icon: List, label: "Companies", href: "/admin/companies" },
-    { icon: Compass, label: "Analytics", href: "/admin/analytics" },
+    // { icon: Compass, label: "Analytics", href: "/admin/analytics" },
 ];
 
 const guestRoutes = [
