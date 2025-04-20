@@ -58,7 +58,7 @@ export const ShortDescriptionForm = ({initialData, jobId} : ShortDescriptionForm
       try {
         setIsPrompting(true)
         const customPrompt = `Could you craft a concise job description for a ${prompt}
-        position in fewer than 400 characters?`
+        position in fewer than 400 characters for posting this job on the job portal?`
 
         await getGenerativeAIResponse(customPrompt).then((data) => {
           form.setValue("short_description", data)
